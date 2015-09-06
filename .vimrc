@@ -18,6 +18,16 @@ colorscheme ron " elflord ron peachpuff default 设置配色方案，vim自带�
 filetype on
 filetype plugin on
 
+"开启光亮光标行
+"set cursorline
+"hi CursorLine   cterm=NONE ctermbg=white  ctermfg=NONE guibg=white  guifg=NONE
+
+"开启高亮光标列
+"set cursorcolumn
+"hi CursorColumn cterm=NONE ctermbg=white  ctermfg=NONE guibg=white  guifg=NONE
+
+set shortmess=atI   " 启动的时候不显示那个援助乌干达儿童的提示  
+"set go=             " 不要图形按钮  
 " If using a dark background within the editing area and syntax highlighting
 " turn on this option as well
 set background=dark
@@ -36,11 +46,11 @@ endif
 " The following are commented out as they cause vim to behave a lot
 " differently from regular Vi. They are highly recommended though.
 
-"set ignorecase " 搜索模式里忽略大小写
+set ignorecase " 搜索模式里忽略大小写
 "set smartcase " 如果搜索模式包含大写字符，不使用 'ignorecase' 选项。只有在输入搜索模式并且打开 'ignorecase' 选项时才会使用。
 set autowrite " 自动把内容写回文件: 如果文件被修改过，在每个 :next、:rewind、:last、:first、:previous、:stop、:suspend、:tag、:!、:make、CTRL-] 和 CTRL-^命令时进行；用 :buffer、CTRL-O、CTRL-I、'{A-Z0-9} 或 `{A-Z0-9} 命令转到别的文件时亦然。
 set autoindent " 设置自动对齐(缩进)：即每行的缩进值与上一行相等；使用 noautoindent 取消设置
-"set smartindent " 智能对齐方式
+set smartindent " 智能对齐方式
 set tabstop=4 " 设置制表符(tab键)的宽度
 set softtabstop=4 " 设置软制表符的宽度
 set shiftwidth=4 " (自动) 缩进使用的4个空格
@@ -68,6 +78,10 @@ set showmode " 命令行显示vim当前模式
 "--find setting--
 set incsearch " 输入字符串就显示匹配点
 set hlsearch
+
+set mouse=a "Have a mouse"
+set fileencodings=utf-8-bom,ucs-bom,utf-8,cp936,gb18030,ucs,big5
+
 "-----------------VIM SETTING----------------------" 
 
 
@@ -81,6 +95,7 @@ set tags+=./tags "add current directory's generated tags file
 
 "-----------------TAGLIST----------------------" 
 "-- Taglist setting --
+"let Tlist_Auto_Open=0
 let Tlist_Ctags_Cmd='ctags' "因为我们放在环境变量里，所以可以直接执行
 let Tlist_Use_Right_Window=1 "让窗口显示在右边，0的话就是显示在左边
 let Tlist_Show_One_File=0 "让taglist可以同时展示多个文件的函数列表
@@ -141,19 +156,19 @@ set foldcolumn=5 " 设置折叠栏宽度
 "-----------------MiniBufferExplorer----------------------" 
 
 "-----------------QuickFix setting ----------------------" 
-" 按下F6，执行make clean
-map <F6> :make clean<CR><CR><CR>
-" 按下F7，执行make编译程序，并打开quickfix窗口，显示编译信息
-map <F7> :make<CR><CR><CR> :copen<CR><CR>
-" 按下F8，光标移到上一个错误所在的行
-map <F8> :cp<CR>
-" 按下F9，光标移到下一个错误所在的行
-map <F9> :cn<CR>
-" 以上的映射是使上面的快捷键在插入模式下也能用
-imap <F6> <ESC>:make clean<CR><CR><CR>
-imap <F7> <ESC>:make<CR><CR><CR> :copen<CR><CR>
-imap <F8> <ESC>:cp<CR>
-imap <F9> <ESC>:cn<CR>
+"" 按下F6，执行make clean
+"map <F6> :make clean<CR><CR><CR>
+"" 按下F7，执行make编译程序，并打开quickfix窗口，显示编译信息
+"map <F7> :make<CR><CR><CR> :copen<CR><CR>
+"" 按下F8，光标移到上一个错误所在的行
+"map <F8> :cp<CR>
+"" 按下F9，光标移到下一个错误所在的行
+"map <F9> :cn<CR>
+"" 以上的映射是使上面的快捷键在插入模式下也能用
+"imap <F6> <ESC>:make clean<CR><CR><CR>
+"imap <F7> <ESC>:make<CR><CR><CR> :copen<CR><CR>
+"imap <F8> <ESC>:cp<CR>
+"imap <F9> <ESC>:cn<CR>
 "-----------------QuickFix setting ----------------------" 
 
 
@@ -193,5 +208,111 @@ let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplModSelTarget = 1  
 let g:miniBufExplMoreThanOne=0  
 "-----------------Cscope setting ----------------------" 
-set fileencodings=utf-8-bom,ucs-bom,utf-8,cp936,gb18030,ucs,big5
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""新文件标题
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"新建.c,.h,.sh,.java文件，自动插入文件头 
+autocmd BufNewFile *.cpp,*.[ch],*.sh,*.rb,*.java,*.py exec ":call SetTitle()" 
+""定义函数SetTitle，自动插入文件头 
+func SetTitle() 
+	"如果文件类型为.sh文件 
+	if &filetype == 'sh' 
+		call setline(1,"\#!/bin/bash") 
+		call append(line("."), "") 
+    elseif &filetype == 'python'
+        call setline(1,"#!/usr/bin/env python")
+        call append(line("."),"# coding=utf-8")
+	    call append(line(".")+1, "") 
+
+    elseif &filetype == 'ruby'
+        call setline(1,"#!/usr/bin/env ruby")
+        call append(line("."),"# encoding: utf-8")
+	    call append(line(".")+1, "")
+
+"    elseif &filetype == 'mkd'
+"        call setline(1,"<head><meta charset=\"UTF-8\"></head>")
+	else 
+		call setline(1, "/*************************************************************************") 
+		call append(line("."), "	> File Name: ".expand("%")) 
+		call append(line(".")+1, "	> Author: ") 
+		call append(line(".")+2, "	> Mail: ") 
+		call append(line(".")+3, "	> Created Time: ".strftime("%c")) 
+		call append(line(".")+4, " ************************************************************************/") 
+		call append(line(".")+5, "")
+	endif
+	if expand("%:e") == 'cpp'
+		call append(line(".")+6, "#include<iostream>")
+		call append(line(".")+7, "using namespace std;")
+		call append(line(".")+8, "")
+	endif
+	if &filetype == 'c'
+		call append(line(".")+6, "#include<stdio.h>")
+		call append(line(".")+7, "")
+	endif
+	if expand("%:e") == 'h'
+		call append(line(".")+6, "#ifndef _".toupper(expand("%:r"))."_H")
+		call append(line(".")+7, "#define _".toupper(expand("%:r"))."_H")
+		call append(line(".")+8, "#endif")
+	endif
+	if &filetype == 'java'
+		call append(line(".")+6,"public class ".expand("%:r"))
+		call append(line(".")+7,"")
+	endif
+	"新建文件后，自动定位到文件末尾
+endfunc 
+autocmd BufNewFile * normal G
+
+
+
+"代码格式优化化
+
+map <F6> :call FormartSrc()<CR><CR>
+
+"定义FormartSrc()
+func FormartSrc()
+    exec "w"
+    if &filetype == 'c'
+        exec "!astyle --style=ansi -a --suffix=none %"
+    elseif &filetype == 'cpp' || &filetype == 'hpp'
+        exec "r !astyle --style=ansi --one-line=keep-statements -a --suffix=none %> /dev/null 2>&1"
+    elseif &filetype == 'perl'
+        exec "!astyle --style=gnu --suffix=none %"
+    elseif &filetype == 'py'||&filetype == 'python'
+        exec "r !autopep8 -i --aggressive %"
+    elseif &filetype == 'java'
+        exec "!astyle --style=java --suffix=none %"
+    elseif &filetype == 'jsp'
+        exec "!astyle --style=gnu --suffix=none %"
+    elseif &filetype == 'xml'
+        exec "!astyle --style=gnu --suffix=none %"
+    else
+        exec "normal gg=G"
+        return
+    endif
+    exec "e! %"
+endfunc
+"结束定义FormartSrc
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""实用设置
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has("autocmd")
+      autocmd BufReadPost *
+          \ if line("'\"") > 0 && line("'\"") <= line("$") |
+          \   exe "normal g`\"" |
+          \ endif
+endif
+""当打开vim且没有文件时自动打开NERDTree
+"autocmd vimenter * if !argc() | NERDTree | endif
+"" 只剩 NERDTree时自动关闭
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" 设置当文件被改动时自动载入
+set autoread
+" quickfix模式
+autocmd FileType c,cpp map <buffer> <leader><space> :w<cr>:make<cr>
+"代码补全 
+set completeopt=preview,menu 
