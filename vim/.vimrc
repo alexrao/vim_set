@@ -9,10 +9,10 @@ set nocompatible
 
 " Vim5 and later versions support syntax highlighting. Uncommenting the
 " following enables syntax highlighting by default.
-if has("syntax")
-syntax on " 语法高亮
-endif
-colorscheme ron " elflord ron peachpuff default 设置配色方案，vim自带的配色方案保存在/usr/share/vim/vim72/colors目录下
+"if has("syntax")
+"syntax on " 语法高亮
+"endif
+"colorscheme ron " elflord ron peachpuff default 设置配色方案，vim自带的配色方案保存在/usr/share/vim/vim72/colors目录下
 
 " detect file type
 filetype on
@@ -32,15 +32,20 @@ set shortmess=atI   " 启动的时候不显示那个援助乌干达儿童的提�
 " turn on this option as well
 set background=dark
 
-syntax enable
+"syntax enable
+syntax on
 colorscheme monokai
 
+"设置字体
+set guifont=Monospace\ 12
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file
 if has("autocmd")
 au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 "have Vim load indentation rules and plugins according to the detected filetype
 filetype plugin indent on
+set et
+set ci
 endif
 
 " The following are commented out as they cause vim to behave a lot
@@ -89,6 +94,7 @@ set fileencodings=utf-8-bom,ucs-bom,utf-8,cp936,gb18030,ucs,big5
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>  
 set tags=tags
 set tags+=./tags "add current directory's generated tags file
+set tags+=./tags_all "add current directory's generated tags file
 "set tags+=~/arm/linux-2.6.24.7/tags "add new tags file(刚刚生成tags的路径，在ctags -R 生成tags文件后，不要将tags移动到别的目录，否则ctrl+］时，会提示找不到源码文件)
 "-----------------CTAGS----------------------" 
 
@@ -106,11 +112,6 @@ let Tlist_Process_File_Always=1 "实时更新tags
 let Tlist_Inc_Winwidth=0
 
 "-----------------TAGLIST----------------------" 
-
-
-"-----------------CSCOPE----------------------" 
-set cscopequickfix=s-,c-,d-,i-,t-,e-  
-"-----------------CSCOPE----------------------" 
 
 
 "-----------------OmniCppComplete----------------------" 
@@ -173,30 +174,45 @@ set foldcolumn=5 " 设置折叠栏宽度
 
 
 "-----------------Cscope setting ----------------------" 
+"if has("cscope")
+"set csprg=cscope " 指定用来执行cscope的命令
+"set csto=0 " 设置cstag命令查找次序：0先找cscope数据库再找标签文件；1先找标签文件再找cscope数据库
+"set cst " 同时搜索cscope数据库和标签文件
+"set cscopequickfix=s-,c-,d-,i-,t-,e- " 使用QuickFix窗口来显示cscope查找结果
+"set nocsverb
+"if filereadable("cscope.out") " 若当前目录下存在cscope数据库，添加该数据库到vim
+"cs add cscope.out
+"elseif $CSCOPE_DB != "" " 否则只要环境变量CSCOPE_DB不为空，则添加其指定的数据库到vim
+"cs add $CSCOPE_DB
+"endif
+"set csverb
+"endif
+""""""""""""""""""""""cscope设置""""""""""""""""""
+set cscopequickfix=s-,c-,d-,i-,t-,e-
 if has("cscope")
-set csprg=/usr/bin/cscope " 指定用来执行cscope的命令
-set csto=0 " 设置cstag命令查找次序：0先找cscope数据库再找标签文件；1先找标签文件再找cscope数据库
-set cst " 同时搜索cscope数据库和标签文件
-set cscopequickfix=s-,c-,d-,i-,t-,e- " 使用QuickFix窗口来显示cscope查找结果
-set nocsverb
-if filereadable("cscope.out") " 若当前目录下存在cscope数据库，添加该数据库到vim
-cs add cscope.out
-elseif $CSCOPE_DB != "" " 否则只要环境变量CSCOPE_DB不为空，则添加其指定的数据库到vim
-cs add $CSCOPE_DB
-endif
-set csverb
+    set csprg=/usr/bin/cscope
+    set csto=1
+    set cst
+    set nocsverb
+    " add any database in current directory
+    if filereadable("cscope.out")
+    cs add cscope.out
+    endif
+    set csverb
 endif
 map <F4> :cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
-imap <F4> <ESC>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
+nmap <C-n> :cnext<CR>
+nmap <C-p> :cprev<CR>
+"imap <F4> <ESC>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
 " 将:cs find c等Cscope查找命令映射为<C-_>c等快捷键（按法是先按Ctrl+Shift+-, 然后很快再按下c）
-nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
-nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
-nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
-nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
-nmap <C-_>t :cs find t <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
-nmap <C-_>e :cs find e <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
-nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
-nmap <C-_>i :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
+"nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
+"nmap <C-_>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+"nmap <C-_>d :cs find d <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
+"nmap <C-_>c :cs find c <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
+"nmap <C-_>t :cs find t <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
+"nmap <C-_>e :cs find e <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
+"nmap <C-_>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+"nmap <C-_>i :cs find i <C-R>=expand("<cfile>")<CR><CR> :copen<CR><CR>
 "-----------------Cscope setting ----------------------" 
 
 
