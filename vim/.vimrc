@@ -37,7 +37,8 @@ syntax on
 colorscheme monokai
 
 "设置字体
-set guifont=Monospace\ 12
+"set guifont=Monospace\ 12
+set  guifont=Courier\ New\ 12
 " Uncomment the following to have Vim jump to the last position when
 " reopening a file
 if has("autocmd")
