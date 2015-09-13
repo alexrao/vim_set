@@ -1,4 +1,4 @@
-1. 添加meld的右键功能: 右键 -> 脚本 ->
+1. 添加meld的右键功能($HOME/.local/share/nautilus/scripts): 右键 -> 脚本 ->
 2. 添加3个脚本
     1) Meld_Compare.sh: 选择两个文档之后直接选择此项对比两个文件或者文件夹
     2) Meld_Source.sh: 分别选择所需对比的原档
