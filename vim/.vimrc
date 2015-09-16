@@ -67,7 +67,7 @@ set showmatch " 设置匹配模式，显示匹配的括号
 set linebreak " 整词换行
 set whichwrap=b,s,<,>,[,] " 光标从行首和行末时可以跳到另一行去
 "set hidden " Hide buffers when they are abandoned
-set mouse=a " Enable mouse usage (all modes) "使用鼠标
+set mouse=v " Enable mouse usage (all modes) "使用鼠标
 set number " Enable line number "显示行号
 "set previewwindow " 标识预览窗口
 set history=50 " set command history to 50 "历史记录50条
@@ -85,7 +85,6 @@ set showmode " 命令行显示vim当前模式
 set incsearch " 输入字符串就显示匹配点
 set hlsearch
 
-set mouse=a "Have a mouse"
 set fileencodings=utf-8-bom,ucs-bom,utf-8,cp936,gb18030,ucs,big5
 
 "-----------------VIM SETTING----------------------" 
@@ -203,7 +202,7 @@ if has("cscope")
 endif
 map <F4> :cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
 nmap <C-n> :cnext<CR>
-nmap <C-p> :cprev<CR>
+nmap <C-m> :cprev<CR>
 "imap <F4> <ESC>:cs add ./cscope.out .<CR><CR><CR> :cs reset<CR>
 " 将:cs find c等Cscope查找命令映射为<C-_>c等快捷键（按法是先按Ctrl+Shift+-, 然后很快再按下c）
 "nmap <C-_>s :cs find s <C-R>=expand("<cword>")<CR><CR> :copen<CR><CR>
